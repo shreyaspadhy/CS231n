@@ -49,7 +49,7 @@ class knearest(object):
 	def compute_dists_no_loop(self, X):
 		F = np.sum(self.X_train**2, axis = 1)
 		G = np.sum(X**2, axis = 1)
-		dists = np.zeros(X.shape[0], self.X_train.shape[0])
+		dists = np.zeros((X.shape[0], self.X_train.shape[0]))
 		#print(G)
 		F = np.tile(F.T, (X.shape[0],1))
 		G = np.tile(G.T, (self.X_train.shape[0],1)).T
@@ -78,7 +78,8 @@ class knearest(object):
 ####### CLASSIFIER CLASS ##############################
 
 
-cifar10_dir = 'C:\Users\shrey\Desktop\SUMMER 2017\cs231n.github.io-master/assignment1\cs231n\datasets/cifar-10-batches-py'
+#cifar10_dir = 'C:\Users\shrey\Desktop\SUMMER 2017\cs231n.github.io-master/assignment1\cs231n\datasets/cifar-10-batches-py'
+cifar10_dir = 'cs231n/datasets/cifar-10-batches-py'
 X_train, y_train, X_test, y_test = load_CIFAR10(cifar10_dir)
 
 print('Training data shape: ', X_train.shape)
