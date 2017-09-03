@@ -174,7 +174,8 @@ class neural_net(object):
             # self.b += - learning_rate*db
 
             if(verbose):
-                print("In the %dth iteration, loss : %f" % (i + 1, loss))
+                if(i % 10 == 0):
+                    print("In the %dth iteration, loss : %f" % (i + 1, loss))
 
         return loss
 
