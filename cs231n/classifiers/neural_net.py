@@ -4,8 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from past.builtins import xrange
 
+
 class TwoLayerNet(object):
-  """
+"""
   A two-layer fully-connected neural network. The net has an input dimension of
   N, a hidden layer dimension of H, and performs classification over C classes.
   We train the network with a softmax loss function and L2 regularization on the
@@ -16,8 +17,9 @@ class TwoLayerNet(object):
 
   input - fully connected layer - ReLU - fully connected layer - softmax
 
-  The outputs of the second fully-connected layer are the scores for each class.
-  """
+The outputs of the second fully-connected layer are the scores for each class.
+"""
+
 
   def __init__(self, input_size, hidden_size, output_size, std=1e-4):
     """
@@ -76,11 +78,15 @@ class TwoLayerNet(object):
     # Store the result in the scores variable, which should be an array of      #
     # shape (N, C).                                                             #
     #############################################################################
-    pass
+    scores = max(np.dot(W1, X) + b1, 0)
+    scores = np.dot(W2, scores) + b2
+
+    scores = np.exp(scores)
+    scores = scores / np.sum(scores)  # Softmax Scores
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
-    
+
     # If the targets are not given then jump out, we're done
     if y is None:
       return scores
@@ -184,36 +190,35 @@ class TwoLayerNet(object):
         learning_rate *= learning_rate_decay
 
     return {
-      'loss_history': loss_history,
-      'train_acc_history': train_acc_history,
-      'val_acc_history': val_acc_history,
+        'loss_history': loss_history,
+        'train_acc_history': train_acc_history,
+        'val_acc_history': val_acc_history,
     }
 
-  def predict(self, X):
-    """
-    Use the trained weights of this two-layer network to predict labels for
-    data points. For each data point we predict scores for each of the C
-    classes, and assign each data point to the class with the highest score.
 
-    Inputs:
-    - X: A numpy array of shape (N, D) giving N D-dimensional data points to
-      classify.
+def predict(self, X):
+  """
+  Use the trained weights of this two-layer network to predict labels for
+  data points. For each data point we predict scores for each of the C
+  classes, and assign each data point to the class with the highest score.
 
-    Returns:
-    - y_pred: A numpy array of shape (N,) giving predicted labels for each of
-      the elements of X. For all i, y_pred[i] = c means that X[i] is predicted
-      to have class c, where 0 <= c < C.
-    """
-    y_pred = None
+  Inputs:
+  - X: A numpy array of shape (N, D) giving N D-dimensional data points to
+    classify.
 
-    ###########################################################################
-    # TODO: Implement this function; it should be VERY simple!                #
-    ###########################################################################
-    pass
-    ###########################################################################
-    #                              END OF YOUR CODE                           #
-    ###########################################################################
+  Returns:
+  - y_pred: A numpy array of shape (N,) giving predicted labels for each of
+    the elements of X. For all i, y_pred[i] = c means that X[i] is predicted
+    to have class c, where 0 <= c < C.
+  """
+  y_pred = None
 
-    return y_pred
+  ###########################################################################
+  # TODO: Implement this function; it should be VERY simple!                #
+  ###########################################################################
+  pass
+  ###########################################################################
+  #                              END OF YOUR CODE                           #
+  ###########################################################################
 
-
+  return y_pred
