@@ -319,11 +319,13 @@ class two_layer_net_BN(object):
         # Batch Norm Layer
         self.mu_b = np.mean(self.h1)
         self.sigma_b = np.std(self.h1)
-        self.h1_hat = (self.h1 - np.mean(self.h1))/np.sqrt(np.square(np.std(self.h1)) + 1e-6)
+        self.h1_hat = (self.h1 - self.mu_b)/np.sqrt(self.sigma_b**2 + 1e-6)
+        # # print("h1_hat : ", self.h1_hat.shape, self.h1.shape)
         self.y1 = self.alpha1 * self.h1_hat + self.beta1
-
+        print("y1 : ", self.y1.shape)
         f = np.dot(self.y1, self.W2) + self.b2
 
+        print("f : ", f.shape)
         # Subtract the max, to prevent small value errors
         f = f - np.broadcast_to(np.resize(np.max(f, axis=1), (f.shape[0], 1)),
                                 (f.shape[0], f.shape[1]))
@@ -350,7 +352,7 @@ class two_layer_net_BN(object):
         dLdf = self.probs
         dLdf[range(X.shape[0]), y] -= 1
         dLdf /= X.shape[0]
-
+        print("dLdf : ", dLdf.shape)
         dLdW2 = np.dot(self.h1.T, dLdf)
         dLdB2 = np.sum(dLdf, axis=0, keepdims=True)
 
@@ -361,7 +363,6 @@ class two_layer_net_BN(object):
         dLdh1_hat = dLdy1*self.alpha1
 
         print("dLdh1_hat : ", dLdh1_hat.shape)
-        
         dLdsigma_bsq = (-1.0/2.0)*((self.sigma_b**2 + 1e-6)**(-3.0/2.0))*np.dot(dLdh1_hat.T, (X - self.mu_b))
 
         print("dLdsigma_bsq : ", self.sigma_b.shape, dLdsigma_bsq.shape)
@@ -394,7 +395,7 @@ class two_layer_net_BN(object):
         for i in range(num_iters):
             X_batch, y_batch = self.sample_batch(X, y, batch_size)
 
-            loss = self.loss_fn(X, y, reg)
+            loss = self.loss_fn(X_batch, y_batch, reg)
             dW1, db1, dW2, db2, dalpha1, dbeta1 = self.backprop_gradient(X_batch, y_batch, reg)
 
             # dW = [-learning_rate * x for x in dW]
